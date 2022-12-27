@@ -48,8 +48,8 @@ app.post('/deploy', async (req, res) => {
 
   if(repoList.includes(text)){
     //post in production channel
-    let a = {requester:user_id,reponame:text,channel:'C049H541U15'}
-    await  api.callAPIMethod('chat.postMessage', payloads.approve(a));
+    let data = {requester:user_id,reponame:text,channel:'C049H541U15'}
+    await  api.callAPIMethod('chat.postMessage', payloads.approve(data));
   }
   else{
               // repo doesnt exist or auto deployment not setup
