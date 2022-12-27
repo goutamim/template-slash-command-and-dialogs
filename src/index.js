@@ -48,11 +48,14 @@ app.post('/deploy', async (req, res) => {
 
   if(repoList.includes(text)){
     //post in production channel
+    console.log("repo exists");
     let data = {requester:user_id,reponame:text,channel:'C049H541U15'}
     await  api.callAPIMethod('chat.postMessage', payloads.approve(data));
+    console.log("calling api");
   }
   else{
               // repo doesnt exist or auto deployment not setup
+              console.log("repo dont exist");
       }
 
   // create the modal payload - includes the dialog structure, Slack API token,
