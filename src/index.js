@@ -43,12 +43,12 @@ app.post('/deploy', async (req, res) => {
   }
 
   // extract the slash command text, and trigger ID from payload
-  const { text } = req.body;
+  const { text,user_id } = req.body;
   console.log(req.body)
 
   if(repoList.includes(text)){
     //post in production channel
-    let a = {requester:req.user.id,reponame:text}
+    let a = {requester:user_id,reponame:text,channel:'C049H541U15'}
     await callAPIMethodPost('chat.postMessage', payloads.approve(a));
   }
   else{
