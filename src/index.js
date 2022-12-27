@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const ticket = require('./ticket');
 const signature = require('./verifySignature');
 const api = require('./api');
 const payloads = require('./payloads');
