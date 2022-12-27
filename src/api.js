@@ -3,11 +3,14 @@ const qs = require('querystring');
 const apiUrl = 'https://slack.com/api';
 const githubUrl = 'https://api.github.com'
 
-const callAPIMethod = async (method, payload) => {
-    let data = Object.assign({ token: process.env.SLACK_ACCESS_TOKEN }, payload);
-    let result = await axios.post(`${apiUrl}/${method}`, qs.stringify(data));
+
+
+const callAPIMethodPost = async (method, payload) => {
+    let result = await axios.post(`${apiUrl}/${method}`, payload, {
+      headers: { Authorization: "Bearer " + process.env.SLACK_ACCESS_TOKEN }
+    });
     return result.data;
-}
+  }
 
 const callgitAPIMethodPost = async () => {
     console.log('calling github api')
@@ -19,6 +22,6 @@ const callgitAPIMethodPost = async () => {
   
 
 module.exports = {
-    callAPIMethod,
+    callAPIMethodPost,
     callgitAPIMethodPost
 }

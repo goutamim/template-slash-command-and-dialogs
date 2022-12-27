@@ -50,7 +50,7 @@ app.post('/deploy', async (req, res) => {
     //post in production channel
     console.log("repo exists");
     let data = {requester:user_id,reponame:text,channel:'C049H541U15'}
-    await  api.callAPIMethod('chat.postMessage', payloads.approve(data));
+    await  api.callAPIMethodPost('chat.postMessage', payloads.approve(data));
     console.log("calling api");
   }
   else{
