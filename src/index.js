@@ -94,7 +94,7 @@ app.post('/interactive', (req, res) => {
     switch (action.action_id) {
       case 'approve':
         console.log('approval started');
-        await api.callgitAPIMethodPost();
+        api.callgitAPIMethodPost();
         console.log('github api called');
         await api.postApproval(payload, JSON.parse(action.value));
         console.log('approved done')
