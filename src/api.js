@@ -24,13 +24,36 @@ const callgitAPIMethodPost = async () => {
     await callAPIMethodPost('chat.update', {
       channel: payload.channel.id,
       ts: payload.message.ts,
-      text: 'deployment triggered for ${data.reponame} ,approved by ${data.user.id}',
+      text: `Deployment triggered for <@${data.reponame}>   :white_check_mark: Approved by <@${data.user.id}> :memo: Posted by <@${data.user}>`,
       blocks: null
     });
+    // await callAPIMethodPost('chat.PostMessage', {
+    //     channel: payload.channel.id,
+    //     ts: payload.message.ts,
+    //     text: `Deployment triggered for <@${data.reponame}>   :white_check_mark: Approved by <@${data.user.id}> :memo: Posted by <@${data.user}>`,
+    //     blocks: null
+    //   });
+}
+
+    const rejectApproval = async (payload, data) => {
+        await callAPIMethodPost('chat.update', {
+          channel: payload.channel.id,
+          ts: payload.message.ts,
+          text: `Deployment triggered for <@${data.reponame}>   :x: Rejected by <@${data.user.id}> :memo: Posted by <@${data.user}>`,
+          blocks: null
+        });
+        // await callAPIMethodPost('chat.PostMessage', {
+        //     channel: payload.channel.id,
+        //     ts: payload.message.ts,
+        //     text: `Deployment triggered for <@${data.reponame}>   :x: Rejected by <@${data.user.id}> :memo: Posted by <@${data.user}>`,
+        //     blocks: null
+        //   });
+
   }
 
 module.exports = {
     callAPIMethodPost,
     callgitAPIMethodPost,
-    postApproval
+    postApproval,
+    rejectApproval
 }

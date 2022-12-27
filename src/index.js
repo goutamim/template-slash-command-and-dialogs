@@ -97,10 +97,11 @@ app.post('/interactive', async (req, res) => {
         await api.callgitAPIMethodPost();
         console.log('github api called');
         await api.postApproval(payload, JSON.parse(action.value));
-        console.log('approved done')
+        console.log('approved')
         break;
       case 'reject':
         await api.rejectApproval(payload, JSON.parse(action.value));
+        console.log('rejected')
         break;
     }
   } else if (payload.type === 'view_submission') {
