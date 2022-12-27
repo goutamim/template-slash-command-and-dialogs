@@ -44,8 +44,17 @@ app.post('/deploy', async (req, res) => {
   }
 
   // extract the slash command text, and trigger ID from payload
-  const { trigger_id } = req.body;
+  const { text } = req.body;
   console.log(req.body)
+
+  if(repoList.includes(text)){
+    //post in production channel
+    let a = {requester:req.user.id,reponame:text}
+    await callAPIMethodPost('chat.postMessage', payloads.approve(a));
+  }
+  else{
+              // repo doesnt exist or auto deployment not setup
+      }
 
   // create the modal payload - includes the dialog structure, Slack API token,
   // and trigger ID
@@ -55,7 +64,6 @@ app.post('/deploy', async (req, res) => {
 
   // let result = await api.callAPIMethod('views.open', view);
 
-  debug('views.open: %o', result);
   return res.send('');
 });
 
@@ -71,8 +79,8 @@ app.post('/interactive', (req, res) => {
   }
 
   const body = JSON.parse(req.body.payload);
+  console.log(body);
   res.send('');
-  ticket.create(body.user.id, body.view);
 });
 
 const server = app.listen(process.env.PORT || 5000, () => {
