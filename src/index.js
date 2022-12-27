@@ -76,7 +76,7 @@ app.post('/deploy', async (req, res) => {
  * Endpoint to receive the dialog submission. Checks the verification token
  * and creates a Helpdesk ticket
  */
-app.post('/interactive', (req, res) => {
+app.post('/interactive', async (req, res) => {
   // Verify the signing secret
   if (!signature.isVerified(req)) {
     debug('Verification token mismatch');
@@ -94,7 +94,7 @@ app.post('/interactive', (req, res) => {
     switch (action.action_id) {
       case 'approve':
         console.log('approval started');
-        api.callgitAPIMethodPost();
+        await api.callgitAPIMethodPost();
         console.log('github api called');
         await api.postApproval(payload, JSON.parse(action.value));
         console.log('approved done')
