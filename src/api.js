@@ -20,8 +20,17 @@ const callgitAPIMethodPost = async () => {
     console.log('github call api sucessfull');
   }
   
+  const postApproval = async (payload, data) => {
+    await callAPIMethodPost('chat.update', {
+      channel: payload.channel.id,
+      ts: payload.message.ts,
+      text: 'deployment triggered for ${data.reponame} ,approved by ${data.user.id}',
+      blocks: null
+    });
+  }
 
 module.exports = {
     callAPIMethodPost,
-    callgitAPIMethodPost
+    callgitAPIMethodPost,
+    postApproval
 }

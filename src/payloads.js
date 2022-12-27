@@ -1,5 +1,5 @@
 module.exports = {
-    approve: context => {
+    approvalRequest: context => {
         return {
             channel: context.channel,
             text: `Deployment of ${context.reponame} requested by <@${context.requester}>`,
@@ -8,7 +8,7 @@ module.exports = {
                     type: 'section',
                     text: {
                         type: 'mrkdwn',
-                        text: `<@${context.requester}> is requesting a deployment.`
+                        text: `Deployment of ${context.reponame} requested by <@${context.requester}>`
                     }
                 },
                 {

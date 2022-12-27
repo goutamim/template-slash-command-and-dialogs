@@ -43,19 +43,22 @@ app.post('/deploy', async (req, res) => {
   }
 
   // extract the slash command text, and trigger ID from payload
-  const { text,user_id } = req.body;
+  const { text,user_id,channel_id} = req.body;
   console.log(req.body)
 
   if(repoList.includes(text)){
     //post in production channel
     console.log("repo exists");
     let data = {requester:user_id,reponame:text,channel:'C049H541U15'}
-    await  api.callAPIMethodPost('chat.postMessage', payloads.approve(data));
+    await  api.callAPIMethodPost('chat.postMessage', payloads.approvalRequest(data));
     console.log("calling api");
   }
   else{
-              // repo doesnt exist or auto deployment not setup
-              console.log("repo dont exist");
+      // repo doesnt exist or auto deployment not setup
+      console.log("repo dont exist");
+      let data = {requester:user_id,reponame:text,channel:channel_id}
+      await  api.callAPIMethodPost('chat.postMessage', payloads.messageNoRepo(data));
+      console.log("calling api");
       }
 
   // create the modal payload - includes the dialog structure, Slack API token,
@@ -80,8 +83,30 @@ app.post('/interactive', (req, res) => {
     return res.status(404).send();
   }
 
-  const body = JSON.parse(req.body.payload);
-  console.log(body);
+  const payload = JSON.parse(req.body.payload);
+  console.log(payload);
+  if (payload.type === 'block_actions') {
+    // acknowledge the event before doing heavy-lifting on our servers
+    res.status(200).send();
+
+    let action = payload.actions[0]
+
+    switch (action.action_id) {
+      case 'approve':
+        console.log('approval started');
+        await api.callgitAPIMethodPost();
+        console.log('github api called');
+        await api.postApproval(payload, JSON.parse(action.value));
+        console.log('approved done')
+        break;
+      case 'reject':
+        await api.rejectApproval(payload, JSON.parse(action.value));
+        break;
+    }
+  } else if (payload.type === 'view_submission') {
+    return handleViewSubmission(payload, res);
+  }
+
   res.send('');
 });
 
