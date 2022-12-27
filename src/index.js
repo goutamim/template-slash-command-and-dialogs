@@ -10,6 +10,8 @@ const debug = require('debug')('slash-command-template:index');
 
 const app = express();
 
+const repoList =['penknife-ui','test','dummy-repo']
+
 /*
  * Parse application/x-www-form-urlencoded && application/json
  * Use body-parser's `verify` callback to export a parsed raw body
@@ -34,7 +36,7 @@ app.get('/', (req, res) => {
  * Endpoint to receive /helpdesk slash command from Slack.
  * Checks verification token and opens a dialog to capture more info.
  */
-app.post('/command', async (req, res) => {
+app.post('/deploy', async (req, res) => {
   // Verify the signing secret
   if (!signature.isVerified(req)) {
     debug('Verification token mismatch');
@@ -43,14 +45,15 @@ app.post('/command', async (req, res) => {
 
   // extract the slash command text, and trigger ID from payload
   const { trigger_id } = req.body;
+  console.log(req.body)
 
   // create the modal payload - includes the dialog structure, Slack API token,
   // and trigger ID
-  let view = payloads.modal({
-    trigger_id
-  });
+  // let view = payloads.modal({
+  //   trigger_id
+  // });
 
-  let result = await api.callAPIMethod('views.open', view);
+  // let result = await api.callAPIMethod('views.open', view);
 
   debug('views.open: %o', result);
   return res.send('');
