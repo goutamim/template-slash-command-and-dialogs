@@ -32,6 +32,8 @@ const callgitAPIMethodPost = async () => {
     let res = await callAPIMethodPost('conversations.open', {
         users: data.requester
       })
+
+      console.log(res)
      
       await callAPIMethodPost('chat.postMessage',  {
         channel: res.channel.id,
