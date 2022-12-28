@@ -50,6 +50,12 @@ const callgitAPIMethodPost = async () => {
           text: `Deployment requested for ${data.reponame}  :x: Rejected by <@${payload.user.id}> :memo: Requested by <@${data.requester}>`,
           blocks: null
         });
+        let res = await callAPIMethodPost('conversations.open', {
+            users: data.requester
+          })
+    
+          console.log(res)
+          
         await callAPIMethodPost('chat.postMessage',  {
             channel: res.channel.id,
             text: `Deployment requested for ${data.reponame}  :x: Rejected by <@${payload.user.id}> :memo: Requested by <@${data.requester}>`,
