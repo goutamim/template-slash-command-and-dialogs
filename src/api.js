@@ -28,6 +28,16 @@ const callgitAPIMethodPost = async () => {
       text: `Deployment triggered for ${data.reponame}  :white_check_mark: Approved by <@${payload.user.id}> :memo: Requested by <@${data.requester}>`,
       blocks: null
     });
+
+    let res = await callAPIMethodPost('conversations.open', {
+        users: data.requester
+      })
+     
+      await callAPIMethodPost('chat.postMessage',  {
+        channel: res.channel.id,
+        text: `Deployment triggered for ${data.reponame}  :white_check_mark: Approved by <@${payload.user.id}> :memo: Requested by <@${data.requester}>`,
+        blocks: null
+      });
     // await callAPIMethodPost('chat.PostMessage', {
     //     channel: payload.channel.id,
     //     ts: payload.message.ts,
@@ -40,7 +50,7 @@ const callgitAPIMethodPost = async () => {
         await callAPIMethodPost('chat.update', {
           channel: payload.channel.id,
           ts: payload.message.ts,
-          text: `Deployment triggered for <@${data.reponame}>   :x: Rejected by <@${data.user.id}> :memo: Posted by <@${data.user}>`,
+          text: `Deployment triggered for ${data.reponame}  :x: Rejected by <@${payload.user.id}> :memo: Requested by <@${data.requester}>`,
           blocks: null
         });
         // await callAPIMethodPost('chat.PostMessage', {
