@@ -52,7 +52,7 @@ const callgitAPIMethodPost = async () => {
         });
         await callAPIMethodPost('chat.postMessage',  {
             channel: res.channel.id,
-            text: `Deployment triggered for ${data.reponame}  :white_check_mark: Approved by <@${payload.user.id}> :memo: Requested by <@${data.requester}>`,
+            text: `Deployment requested for ${data.reponame}  :x: Rejected by <@${payload.user.id}> :memo: Requested by <@${data.requester}>`,
             blocks: null
           });
 
