@@ -50,7 +50,7 @@ app.post('/deploy', async (req, res) => {
   console.log(req.body)
   const repoName= text.split(' ')[0]; 
   const tenantName=text.split(' ')[1]
-;  const tenants = repoTenantsList.filter((i) =>  i.reponame == repoName )[0].tenants
+;  const tenants = repoTenantList.filter((i) =>  i.reponame == repoName )[0].tenants
 
   if(repoList.includes(repoName) && tenants.includes(tenantName)){
     //post in production channel
