@@ -12,9 +12,9 @@ const callAPIMethodPost = async (method, payload) => {
     return result.data;
   }
 
-const callgitAPIMethodPost = async () => {
+const callgitAPIMethodPost = async (data) => {
     console.log('calling github api')
-    let result = await axios.post(`${githubUrl}/repos/softwareartistry/k8s-cli/actions/workflows/penknife-ui-deploy.yml/dispatches`, {"ref":"sprint"}, {
+    let result = await axios.post(`${githubUrl}/repos/softwareartistry/k8s-cli/actions/workflows/${data.reponame}/dispatches`, {"ref":"sprint","inputs":"{`${data.requester}}`"}, {
       headers: { Authorization: "Bearer " + process.env.GITHUB_ACCESS_TOKEN }
     });
     console.log('github call api sucessfull');
@@ -22,10 +22,13 @@ const callgitAPIMethodPost = async () => {
   
   const postApproval = async (payload, data) => {
     console.log(data);
+    repo=data.reponame;
+    console.log(repo.split(' ')[0]);
     await callAPIMethodPost('chat.update', {
       channel: payload.channel.id,
       ts: payload.message.ts,
-      text: `Deployment triggered for ${data.reponame}  :white_check_mark: Approved by <@${payload.user.id}> :memo: Requested by <@${data.requester}>`,
+      //.split(' ')[0]
+      text: `Deployment triggered for ${data.reponame}:white_check_mark: Approved by <@${payload.user.id}> :memo: Requested by <@${data.requester}>`,
       blocks: null
     });
 
@@ -55,7 +58,7 @@ const callgitAPIMethodPost = async () => {
           })
     
           console.log(res)
-          
+
         await callAPIMethodPost('chat.postMessage',  {
             channel: res.channel.id,
             text: `Deployment requested for ${data.reponame}  :x: Rejected by <@${payload.user.id}> :memo: Requested by <@${data.requester}>`,

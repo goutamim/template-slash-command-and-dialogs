@@ -40,5 +40,17 @@ module.exports = {
                 }
             ]
         }
+    },
+    messageNoRepo: context => {
+        return {
+            channel: context.channel,
+            text: `Deployment of ${context.reponame} requested by <@${context.requester}>`,
+            blocks: [
+                {
+                    "response_type": "empheral",
+                    "text": "repo  or tenant dont exist"
+                }
+            ]
+        }
     }
 }

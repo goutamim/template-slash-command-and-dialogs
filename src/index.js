@@ -9,7 +9,10 @@ const debug = require('debug')('slash-command-template:index');
 
 const app = express();
 
-const repoList =['penknife-ui','test','dummy-repo']
+//const repoList =['penknife-ui','test','dummy-repo']
+const repoTenantList = [{reponame: 'penknife-ui', tenants: ['test1', 'test2']}, {reponame: 'dms-ui', tenants: ['', '']},]
+const repoList = repoTenantList.map(i => i.reponame)
+
 
 /*
  * Parse application/x-www-form-urlencoded && application/json
@@ -45,8 +48,11 @@ app.post('/deploy', async (req, res) => {
   // extract the slash command text, and trigger ID from payload
   const { text,user_id,channel_id} = req.body;
   console.log(req.body)
+  const repoName= text.split(' ')[0]; 
+  const tenantName=text.split(' ')[1]
+;  const tenants = repoTenantsList.filter((i) =>  i.reponame == repoName )[0].tenants
 
-  if(repoList.includes(text)){
+  if(repoList.includes(repoName) && tenants.includes(tenantName)){
     //post in production channel
     console.log("repo exists");
     let data = {requester:user_id,reponame:text,channel:'C049H541U15'}
@@ -56,9 +62,10 @@ app.post('/deploy', async (req, res) => {
   else{
       // repo doesnt exist or auto deployment not setup
       console.log("repo dont exist");
-      let data = {requester:user_id,reponame:text,channel:channel_id}
-      await  api.callAPIMethodPost('chat.postMessage', payloads.messageNoRepo(data));
-      console.log("calling api");
+      return res.status(404).send("tenant  or repo not found");
+      //let data = {requester:user_id,reponame:text,channel:channel_id}
+      //await  api.callAPIMethodPost('chat.postMessage', payloads.messageNoRepo(data));
+      //console.log("calling api");
       }
 
   // create the modal payload - includes the dialog structure, Slack API token,
@@ -94,7 +101,7 @@ app.post('/interactive', async (req, res) => {
     switch (action.action_id) {
       case 'approve':
         console.log('approval started');
-        await api.callgitAPIMethodPost();
+        await api.callgitAPIMethodPost(JSON.parse(action.value));
         console.log('github api called');
         await api.postApproval(payload, JSON.parse(action.value));
         console.log('approved')
