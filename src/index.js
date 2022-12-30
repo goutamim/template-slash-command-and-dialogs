@@ -52,7 +52,7 @@ app.post('/deploy', async (req, res) => {
   const tenantName=text.split(' ')[1]; 
 
   const tenantList = repoTenantList.filter((i) =>  i.repo == repoName )[0].tenants
-
+  
   if(repoList.includes(repoName) && tenantList.includes(tenantName)){
     //post in production channel
     console.log("repo exists");
