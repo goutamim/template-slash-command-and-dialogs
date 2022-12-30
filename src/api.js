@@ -22,7 +22,7 @@ const callgitAPIMethodPost = async (data) => {
         headers: { Authorization: "Bearer " + process.env.GITHUB_ACCESS_TOKEN }
       })
     //let result = await axios.post(`${githubUrl}/repos/softwareartistry/k8s-cli/actions/workflows/penknife-ui-deploy.yml/dispatches`, {"ref":"sprint"}, {
-    let result = await axios.post(`${githubUrl}/repos/softwareartistry/k8s-cli/actions/workflows/${appName}.yml/dispatches`, {"ref":"sprint","inputs":{"tenant":`"${tenantName}"`}}, {
+    let result = await axios.post(`${githubUrl}/repos/softwareartistry/k8s-cli/actions/workflows/${appName}.yml/dispatches`, {"ref":"sprint","inputs":{"tenant":`${tenantName}`}}, {
       headers: { Authorization: "Bearer " + process.env.GITHUB_ACCESS_TOKEN }
     });
     console.log(result)
