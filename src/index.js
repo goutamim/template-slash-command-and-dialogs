@@ -10,8 +10,8 @@ const debug = require('debug')('slash-command-template:index');
 const app = express();
 
 //const repoList =['penknife-ui','test','dummy-repo']
-const repoTenantList = [{reponame: 'penknife-ui', tenants: ['test1', 'test2']}, {reponame: 'dms-ui', tenants: ['', '']},]
-const repoList = repoTenantList.map(i => i.reponame)
+const repoTenantList = [{repo: 'penknife-ui', tenants: ['test1', 'test2']}, {repo: 'dms-ui', tenants: ['', '']},]
+const repoList = repoTenantList.map(i => i.repo)
 
 
 /*
@@ -51,7 +51,7 @@ app.post('/deploy', async (req, res) => {
   const repoName= text.split(' ')[0]; 
   const tenantName=text.split(' ')[1]; 
 
-  const tenantList = repoTenantList.filter((i) =>  i.reponame == repoName )[0].tenants
+  const tenantList = repoTenantList.filter((i) =>  i.repo == repoName )[0].tenants
 
   if(repoList.includes(repoName) && tenantList.includes(tenantName)){
     //post in production channel
