@@ -10,7 +10,7 @@ const debug = require('debug')('slash-command-template:index');
 const app = express();
 
 //const repoList =['penknife-ui','test','dummy-repo']
-const repoTenantList = [{repo: 'penknife-ui', tenants: ['test1', 'test2']}, {repo: 'dms-ui', tenants: ['', '']},]
+const repoTenantList = [{repo: 'penknife-ui', tenant: ['test1', 'test2']}, {repo: 'dms-ui', tenant: ['', '']},]
 const repoList = repoTenantList.map(i => i.repo)
 
 
@@ -51,8 +51,8 @@ app.post('/deploy', async (req, res) => {
   const repoName= text.split(' ')[0]; 
   const tenantName=text.split(' ')[1]; 
 
-  const tenantList = repoTenantList.filter((i) =>  i.repo == repoName )[0].tenants
-  
+  const tenantList = repoTenantList.filter((i) =>  i.repo == repoName )[0].tenant
+
   if(repoList.includes(repoName) && tenantList.includes(tenantName)){
     //post in production channel
     console.log("repo exists");
