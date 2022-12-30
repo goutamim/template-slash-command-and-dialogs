@@ -18,6 +18,9 @@ const callgitAPIMethodPost = async (data) => {
     appName= data.reponame.split(' ')[0]
     tenantName= data.reponame.split(' ')[1]
     console.log(appName + "space" + tenantName)
+    console.log(`${githubUrl}/repos/softwareartistry/k8s-cli/actions/workflows/${appName}.yml/dispatches`, {"ref":"sprint","inputs":{"tenant":`"${tenantName}"`}}, {
+        headers: { Authorization: "Bearer " + process.env.GITHUB_ACCESS_TOKEN }
+      })
     //let result = await axios.post(`${githubUrl}/repos/softwareartistry/k8s-cli/actions/workflows/penknife-ui-deploy.yml/dispatches`, {"ref":"sprint"}, {
     let result = await axios.post(`${githubUrl}/repos/softwareartistry/k8s-cli/actions/workflows/${appName}.yml/dispatches`, {"ref":"sprint","inputs":{"tenant":`"${tenantName}"`}}, {
       headers: { Authorization: "Bearer " + process.env.GITHUB_ACCESS_TOKEN }
