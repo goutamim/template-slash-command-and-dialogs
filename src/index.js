@@ -51,9 +51,9 @@ app.post('/deploy', async (req, res) => {
   const repoName= text.split(' ')[0]; 
   const tenantName=text.split(' ')[1]; 
 
-  const tenants = repoTenantList.filter((i) =>  i.reponame == repoName )[0].tenants
+  const tenantList = repoTenantList.filter((i) =>  i.reponame == repoName )[0].tenants
 
-  if(repoList.includes(repoName) && tenants.includes(tenantName)){
+  if(repoList.includes(repoName) && tenantList.includes(tenantName)){
     //post in production channel
     console.log("repo exists");
     let data = {requester:user_id,reponame:text,channel:'C049H541U15'}

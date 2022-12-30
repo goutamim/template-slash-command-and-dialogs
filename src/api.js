@@ -13,8 +13,10 @@ const callAPIMethodPost = async (method, payload) => {
   }
 
 const callgitAPIMethodPost = async (data) => {
-    console.log('calling github api')
-    let result = await axios.post(`${githubUrl}/repos/softwareartistry/k8s-cli/actions/workflows/${data.reponame}/dispatches`, {"ref":"sprint","inputs":"{`${data.requester}}`"}, {
+    console.log('inside githubapi call');
+    console.log(data)
+    console.log(data.reponame)
+    let result = await axios.post(`${githubUrl}/repos/softwareartistry/k8s-cli/actions/workflows/${data.reponame}.yml/dispatches`, {"ref":"sprint","inputs":"{`${data.requester}}`"}, {
       headers: { Authorization: "Bearer " + process.env.GITHUB_ACCESS_TOKEN }
     });
     console.log('github call api sucessfull');
