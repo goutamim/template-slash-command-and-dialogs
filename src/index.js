@@ -9,7 +9,8 @@ const debug = require('debug')('slash-command-template:index');
 
 const app = express();
 
-const repoTenantList = [{repo: 'penknife-ui', tenant: ['test1', 'test2']}, {repo: 'dms-ui', tenant: ['', '']},]
+//const repoTenantList = [{repo: 'penknife-ui', tenant: ['test1', 'test2']}, {repo: 'dms-ui', tenant: ['', '']},]
+const repoTenantList = [{repo: 'penknife-ui', tenant: ['demo1']}]
 const repoList = repoTenantList.map(i => i.repo)
 
 
