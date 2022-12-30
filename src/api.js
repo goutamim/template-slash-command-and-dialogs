@@ -27,7 +27,6 @@ const callgitAPIMethodPost = async (data) => {
     await callAPIMethodPost('chat.update', {
       channel: payload.channel.id,
       ts: payload.message.ts,
-      //.split(' ')[0]
       text: `Deployment triggered for ${data.reponame}:white_check_mark: Approved by <@${payload.user.id}> :memo: Requested by <@${data.requester}>`,
       blocks: null
     });
@@ -64,12 +63,30 @@ const callgitAPIMethodPost = async (data) => {
             text: `Deployment requested for ${data.reponame}  :x: Rejected by <@${payload.user.id}> :memo: Requested by <@${data.requester}>`,
             blocks: null
           });
+        }
 
-  }
+    const norepoTenant = async (data) => {
+        console.log("no repo or Tenant message ");
+
+        let res = await callAPIMethodPost('conversations.open', {
+            users: data.requester
+            })
+
+        console.log(res)
+            
+        await callAPIMethodPost('chat.postMessage',  {
+            channel: res.channel.id,
+            text: `Deployment request not sent for approval as  ${data.reponame} does not exist`,
+            blocks: null
+        });
+
+}
+
 
 module.exports = {
     callAPIMethodPost,
     callgitAPIMethodPost,
     postApproval,
-    rejectApproval
+    rejectApproval,
+    norepoTenant
 }

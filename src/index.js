@@ -50,6 +50,7 @@ app.post('/deploy', async (req, res) => {
   console.log(req.body)
   const repoName= text.split(' ')[0]; 
   const tenantName=text.split(' ')[1]; 
+
   const tenants = repoTenantList.filter((i) =>  i.reponame == repoName )[0].tenants
 
   if(repoList.includes(repoName) && tenants.includes(tenantName)){
@@ -57,15 +58,15 @@ app.post('/deploy', async (req, res) => {
     console.log("repo exists");
     let data = {requester:user_id,reponame:text,channel:'C049H541U15'}
     await  api.callAPIMethodPost('chat.postMessage', payloads.approvalRequest(data));
-    console.log("calling api");
+    console.log("called  approval  message api to send to channel");
   }
   else{
-      // repo doesnt exist or auto deployment not setup
-      console.log("repo dont exist");
+      // repo or tenant  dont exist 
+      console.log("repo or tenant dont exist");
       //return res.status(404).send("tenant  or repo not found");
       let data = {requester:user_id,reponame:text,channel:channel_id}
-      await  api.callAPIMethodPost('chat.postMessage', payloads.messageNoRepo(data));
-      console.log("calling api");
+      await api.norepoTenant(data);
+      console.log("calling norepoTenant api");
       }
 
   // create the modal payload - includes the dialog structure, Slack API token,
