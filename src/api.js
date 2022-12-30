@@ -19,6 +19,7 @@ const callgitAPIMethodPost = async (data) => {
     let result = await axios.post(`${githubUrl}/repos/softwareartistry/k8s-cli/actions/workflows/${data.reponame}.yml/dispatches`, {"ref":"sprint","inputs":"{`${data.requester}}`"}, {
       headers: { Authorization: "Bearer " + process.env.GITHUB_ACCESS_TOKEN }
     });
+    console.log(result)
     console.log('github call api sucessfull');
   }
   
