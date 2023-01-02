@@ -11,7 +11,7 @@ const app = express();
 
 //const repoTenantList = [{repo: 'penknife-ui', tenant: ['test1', 'test2']}, {repo: 'penknife-server', tenant: ['', '']},]
 const repoTenantList = [{repo: 'penknife-ui', tenant: ['demo']},{repo: 'penknife-server', tenant: ['demo']},
-                        {repo: 'practifly-server', tenant: ['']},{repo: 'practifly-ui', tenant: ['']}]
+                        {repo: 'practifly-server', tenant: ['demo1']},{repo: 'practifly-ui', tenant: ['demo1']}]
 const repoList = repoTenantList.map(i => i.repo)
 
 
