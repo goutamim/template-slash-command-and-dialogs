@@ -10,7 +10,8 @@ const debug = require('debug')('slash-command-template:index');
 const app = express();
 
 //const repoTenantList = [{repo: 'penknife-ui', tenant: ['test1', 'test2']}, {repo: 'penknife-server', tenant: ['', '']},]
-const repoTenantList = [{repo: 'penknife-ui', tenant: ['demo']},{repo: 'penknife-server', tenant: ['demo']}]
+const repoTenantList = [{repo: 'penknife-ui', tenant: ['demo']},{repo: 'penknife-server', tenant: ['demo']},
+                        {repo: 'practifly-server', tenant: ['']},{repo: 'practifly-ui', tenant: ['']}]
 const repoList = repoTenantList.map(i => i.repo)
 
 
@@ -30,12 +31,11 @@ app.use(bodyParser.urlencoded({ verify: rawBodyBuffer, extended: true }));
 app.use(bodyParser.json({ verify: rawBodyBuffer }));
 
 app.get('/', (req, res) => {
-  res.send('<h2>The Slash Command and Dialog app is running</h2> <p>Follow the' +
-    ' instructions in the README to configure the Slack App and your environment variables.</p>');
+  res.send('<h2>The Slash Command app is running</h2> ');
 });
 
 /*
- * Endpoint to receive /helpdesk slash command from Slack.
+ * Endpoint to receive /deploy slash command from Slack.
  * Checks verification token and opens a dialog to capture more info.
  */
 app.post('/deploy', async (req, res) => {
@@ -69,13 +69,6 @@ app.post('/deploy', async (req, res) => {
       console.log("calling norepoTenant api");
       }
 
-  // create the modal payload - includes the dialog structure, Slack API token,
-  // and trigger ID
-  // let view = payloads.modal({
-  //   trigger_id
-  // });
-
-  // let result = await api.callAPIMethod('views.open', view);
 
   return res.send('');
 });
