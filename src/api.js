@@ -12,8 +12,8 @@ const callAPIMethodPost = async (method, payload) => {
 const callgitAPIMethodPost = async (data) => {
 	console.log("inside githubapi call");
 	console.log(data);
-	appName = data.reponame.split(" ")[0];
-	tenantName = data.reponame.split(" ")[1];
+	let appName = data.reponame.split(" ")[0];
+	let tenantName = data.reponame.split(" ")[1];
 	console.log(appName + "space" + tenantName);
 	console.log(
 		`${githubUrl}/repos/softwareartistry/k8s-cli/actions/workflows/${appName}.yml/dispatches`,
