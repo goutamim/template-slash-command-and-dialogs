@@ -40,7 +40,7 @@ const callgitAPIMethodPost = async (data) => {
 
 const postApproval = async (payload, data) => {
 	console.log(data);
-	repo = data.reponame;
+	let repo = data.reponame;
 	console.log(repo.split(" ")[0]);
 	await callAPIMethodPost("chat.update", {
 		channel: payload.channel.id,
