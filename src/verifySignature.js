@@ -1,5 +1,6 @@
 import crypto from "crypto";
-import * as timingSafeCompare from "tsscmp";
+import timingSafeCompare from "tsscmp";
+
 
 const isVerified = (req) => {
 	const signature = req.headers["x-slack-signature"];
