@@ -1,117 +1,106 @@
-require('dotenv').config();
+import * as dotenv from "dotenv";
+import express from "express";
+import bodyParser from "body-parser";
+import { isVerified } from "./verifySignature.js";
+import api from "./api.js";
+import { approvalRequest } from "./payloads.js";
+import { getRepoList, getTenantList } from "./config.js";
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const signature = require('./verifySignature');
-const api = require('./api');
-const payloads = require('./payloads');
-const debug = require('debug')('slash-command-template:index');
-
+dotenv.config();
 const app = express();
 
-//const repoTenantList = [{repo: 'penknife-ui', tenant: ['test1', 'test2']}, {repo: 'penknife-server', tenant: ['', '']},]
-const repoTenantList = [{repo: 'penknife-ui', tenant: ['demo','practifly','314ecorp']},{repo: 'penknife-server', tenant: ['demo','practifly','314ecorp']},
-                        {repo: 'practifly-server', tenant: ['demo1']},{repo: 'practifly-ui', tenant: ['demo1']}]
-const repoList = repoTenantList.map(i => i.repo)
-
-
-/*
- * Parse application/x-www-form-urlencoded && application/json
- * Use body-parser's `verify` callback to export a parsed raw body
- * that you need to use to verify the signature
- */
-
 const rawBodyBuffer = (req, res, buf, encoding) => {
-  if (buf && buf.length) {
-    req.rawBody = buf.toString(encoding || 'utf8');
-  }
+	if (buf && buf.length) {
+		req.rawBody = buf.toString(encoding || "utf8");
+	}
 };
 
 app.use(bodyParser.urlencoded({ verify: rawBodyBuffer, extended: true }));
 app.use(bodyParser.json({ verify: rawBodyBuffer }));
 
-app.get('/', (req, res) => {
-  res.send('<h2>The Slash Command app is running</h2> ');
+app.get("/", (req, res) => {
+	res.send("<h2>The Slash Command /deploy app is running</h2> ");
 });
 
-/*
- * Endpoint to receive /deploy slash command from Slack.
- * Checks verification token and opens a dialog to capture more info.
- */
-app.post('/deploy', async (req, res) => {
-  // Verify the signing secret
-  if (!signature.isVerified(req)) {
-    debug('Verification token mismatch');
-    return res.status(404).send();
-  }
+app.post("/deploy", async (req, res) => {
+	// Verify the signing secret
+	if (!isVerified(req)) {
+		return res.status(404).send();
+	}
 
-  // extract the slash command text, and trigger ID from payload
-  const { text,user_id,channel_id} = req.body;
-  console.log(req.body)
-  const repoName= text.split(' ')[0]; 
-  const tenantName=text.split(' ')[1]; 
+	// extract the slash command text, and trigger ID from payload
+	const { text, user_id, channel_id } = req.body;
+	console.log(req.body);
+	const repoName = text.split(" ")[0];
+	const tenantName = text.split(" ")[1];
 
-  const tenantList = repoTenantList.filter((i) =>  i.repo == repoName )[0]?.tenant
+	if (
+		getRepoList().includes(repoName) &&
+		getTenantList(repoName)?.includes(tenantName)
+	) {
+		//post in production channel
+		console.log("repo exists");
+		let data = {
+			requester: user_id,
+			reponame: text,
+			channel: "C049H541U15",
+		};
+		await api.callAPIMethodPost("chat.postMessage", approvalRequest(data));
+		console.log("called  approval  message api to send to channel");
+	} else {
+		// repo or tenant  dont exist
+		console.log("repo or tenant dont exist");
+		//return res.status(404).send("tenant  or repo not found");
+		let data = { requester: user_id, reponame: text, channel: channel_id };
+		await api.norepoTenant(data);
+		console.log("calling norepoTenant api");
+	}
 
-  if(repoList.includes(repoName) && tenantList?.includes(tenantName)){
-    //post in production channel
-    console.log("repo exists");
-    let data = {requester:user_id,reponame:text,channel:'C049H541U15'}
-    await  api.callAPIMethodPost('chat.postMessage', payloads.approvalRequest(data));
-    console.log("called  approval  message api to send to channel");
-  }
-  else{
-      // repo or tenant  dont exist 
-      console.log("repo or tenant dont exist");
-      //return res.status(404).send("tenant  or repo not found");
-      let data = {requester:user_id,reponame:text,channel:channel_id}
-      await api.norepoTenant(data);
-      console.log("calling norepoTenant api");
-      }
-
-
-  return res.send('');
+	return res.send("");
 });
 
 /*
  * Endpoint to receive the dialog submission. Checks the verification token
  * and creates a Helpdesk ticket
  */
-app.post('/interactive', async (req, res) => {
-  // Verify the signing secret
-  if (!signature.isVerified(req)) {
-    debug('Verification token mismatch');
-    return res.status(404).send();
-  }
+app.post("/interactive", async (req, res) => {
+	// Verify the signing secret
+	if (!isVerified(req)) {
+		return res.status(404).send();
+	}
 
-  const payload = JSON.parse(req.body.payload);
-  console.log(payload);
-  if (payload.type === 'block_actions') {
-    // acknowledge the event before doing heavy-lifting on our servers
-    res.status(200).send();
+	const payload = JSON.parse(req.body.payload);
+	console.log(payload);
+	if (payload.type === "block_actions") {
+		// acknowledge the event before doing heavy-lifting on our servers
+		res.status(200).send();
 
-    let action = payload.actions[0]
+		let action = payload.actions[0];
 
-    switch (action.action_id) {
-      case 'approve':
-        console.log('approval started');
-        await api.callgitAPIMethodPost(JSON.parse(action.value));
-        console.log('github api called');
-        await api.postApproval(payload, JSON.parse(action.value));
-        console.log('approved')
-        break;
-      case 'reject':
-        await api.rejectApproval(payload, JSON.parse(action.value));
-        console.log('rejected')
-        break;
-    }
-  } else if (payload.type === 'view_submission') {
-    return handleViewSubmission(payload, res);
-  }
+		switch (action.action_id) {
+			case "approve":
+				console.log("approval started");
+				await api.callgitAPIMethodPost(JSON.parse(action.value));
+				console.log("github api called");
+				await api.postApproval(payload, JSON.parse(action.value));
+				console.log("approved");
+				break;
+			case "reject":
+				await api.rejectApproval(payload, JSON.parse(action.value));
+				console.log("rejected");
+				break;
+		}
+	} else if (payload.type === "view_submission") {
+		return handleViewSubmission(payload, res);
+	}
 
-  res.send('');
+	res.send("");
 });
 
-const server = app.listen(process.env.PORT || 5000, () => {
-  console.log('Express server listening on port %d in %s mode', server.address().port, app.settings.env);
+const server = app.listen(process.env.PORT || 9000, () => {
+	console.log(
+		"Express server listening on port %d in %s mode",
+		server.address().port,
+		app.settings.env
+	);
 });
