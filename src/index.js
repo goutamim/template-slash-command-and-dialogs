@@ -33,7 +33,7 @@ app.post("/deploy", async (req, res) => {
 	console.log(req.body);
 	const repoName = text.split(" ")[0];
 	const tenantName = text.split(" ")[1];
-	const buildStaus = getBuildStatus
+	//const buildStaus = getBuildStatus
 
 	if (
 		getRepoList().includes(repoName) &&
