@@ -1,6 +1,6 @@
 const repoTenantList = [
 	{ repo: "penknife-ui", tenant: ["demo", "practifly", "314ecorp"] },
-	{ repo: "penknife-server", tenant: ["demo", "practifly", "314ecorp"] },
+	{ repo: "penknife-app", tenant: ["demo", "practifly", "314ecorp"]}, //penknife-app and cli same image. no buildname required.
 	{ repo: "practifly-server", tenant: ["demo1"] },
 	{ repo: "practifly-ui", tenant: ["demo1"] },
 ];
