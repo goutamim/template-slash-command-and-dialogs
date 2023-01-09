@@ -113,7 +113,7 @@ const getLastRunStatusOfaWorkflow = async (data) => {
 					Authorization: "Bearer " + process.env.GITHUB_ACCESS_TOKEN,
 				},
 				params: {
-					branch: branch,
+					branch: "sprint",
 					per_page: pageSize,
 					page: currentPage,
 				},
