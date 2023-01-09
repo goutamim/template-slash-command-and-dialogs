@@ -105,7 +105,7 @@ const getLastRunStatusOfaWorkflow = async (repoName) => {
 	var pageSize = 100;
 	console.log("inside getLastRunStatusOfaWorkflow")
 	console.log(
-		`${githubUrl}/repos/softwareartistry/${data.reponame}/actions/workflows/deploy.yml/runs`,
+		`${githubUrl}/repos/softwareartistry/${repoName}/actions/workflows/deploy.yml/runs`,
 		{
 			headers: {
 				Authorization: "Bearer " + process.env.GITHUB_ACCESS_TOKEN,
