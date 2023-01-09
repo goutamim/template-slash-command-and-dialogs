@@ -98,25 +98,28 @@ const norepoTenant = async (data) => {
 	});
 };
 
+const lastDeploymentNotSuccessfull = async (data) => {
+	console.log("last deployment not successfull");
+
+	let res = await callAPIMethodPost("conversations.open", {
+		users: data.requester,
+	});
+
+	console.log(res);
+
+	await callAPIMethodPost("chat.postMessage", {
+		channel: res.channel.id,
+		text: `Deployment request not sent for approval as last deployment for  ${data.reponame}  sprint branch was not sucessfull`,
+		blocks: null,
+	});
+};
+
 const getLastRunStatusOfaWorkflow = async (repoName) => {
 	var workflowRuns = [];
 	var nextPageExists = true;
 	var currentPage = 1;
 	var pageSize = 100;
 	console.log("inside getLastRunStatusOfaWorkflow")
-	console.log(
-		`${githubUrl}/repos/softwareartistry/${repoName}/actions/workflows/deploy.yml/runs`,
-		{
-			headers: {
-				Authorization: "Bearer " + process.env.GITHUB_ACCESS_TOKEN,
-			},
-			params: {
-				branch: "sprint",
-				per_page: pageSize,
-				page: currentPage,
-			},
-		}
-	);
 	while (nextPageExists) {
 		let result = await axios.get(
 			`${githubUrl}/repos/softwareartistry/${repoName}/actions/workflows/deploy.yml/runs`,
@@ -154,5 +157,6 @@ export default {
 	postApproval,
 	rejectApproval,
 	norepoTenant,
-	getLastRunStatusOfaWorkflow
+	getLastRunStatusOfaWorkflow,
+	lastDeploymentNotSuccessfull
 };

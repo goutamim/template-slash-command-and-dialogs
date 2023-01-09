@@ -39,18 +39,25 @@ app.post("/deploy", async (req, res) => {
 		getRepoList().includes(repoName) &&
 		getTenantList(repoName)?.includes(tenantName)
 	) {
+		//check last status of deployment
+		if((await api.getLastRunStatusOfaWorkflow(repoName)).status= "completed")
+		{
 		//post in production channel
-
 		console.log("repo exists");
 		let data = {
 			requester: user_id,
 			reponame: text,
 			channel: "C049H541U15",
 		};
-		console.log(await api.getLastRunStatusOfaWorkflow(repoName));
-		process.exit(0);
+		// process.exit(0);
 		await api.callAPIMethodPost("chat.postMessage", approvalRequest(data));
-		console.log("called  approval  message api to send to channel");
+		console.log("sent  approval  message api  to channel");
+	}
+	else{
+		console.log("last sprint build was not successfull,please fix sprint first")
+		let data = { requester: user_id, reponame: text, channel: channel_id };
+		await api.norepoTenant(data);
+	}
 	} else {
 		// repo or tenant  dont exist
 		console.log("repo or tenant dont exist");
