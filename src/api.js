@@ -139,4 +139,5 @@ export default {
 	postApproval,
 	rejectApproval,
 	norepoTenant,
+	getLastRunStatusOfaWorkflow
 };
