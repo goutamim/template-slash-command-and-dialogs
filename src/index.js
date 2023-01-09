@@ -44,7 +44,6 @@ app.post("/deploy", async (req, res) => {
 		{
 		//post in production channel
 		console.log("repo exists and last deployment is completed");
-	    process.exit(0);
 		let data = {
 			requester: user_id,
 			reponame: text,
@@ -55,7 +54,6 @@ app.post("/deploy", async (req, res) => {
 		console.log("sent  approval  message api  to channel");
 	} else{
 		console.log("last sprint build was not successfull,please fix sprint first")
-		process.exit(0);
 		let data = { requester: user_id, reponame: text, channel: channel_id };
 		await api.norepoTenant(data);
 	}
