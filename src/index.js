@@ -47,7 +47,7 @@ app.post("/deploy", async (req, res) => {
 			reponame: text,
 			channel: "C049H541U15",
 		};
-		console.log(await api.getLastRunStatusOfaWorkflow());
+		console.log(await api.getLastRunStatusOfaWorkflow(data));
 		process.exit(0);
 		await api.callAPIMethodPost("chat.postMessage", approvalRequest(data));
 		console.log("called  approval  message api to send to channel");
