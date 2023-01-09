@@ -40,12 +40,15 @@ app.post("/deploy", async (req, res) => {
 		getTenantList(repoName)?.includes(tenantName)
 	) {
 		//post in production channel
+
 		console.log("repo exists");
 		let data = {
 			requester: user_id,
 			reponame: text,
 			channel: "C049H541U15",
 		};
+		console.log(await getLastRunStatusOfaWorkflow());
+		process.exit(0);
 		await api.callAPIMethodPost("chat.postMessage", approvalRequest(data));
 		console.log("called  approval  message api to send to channel");
 	} else {

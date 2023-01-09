@@ -98,6 +98,41 @@ const norepoTenant = async (data) => {
 	});
 };
 
+const getLastRunStatusOfaWorkflow = async (data) => {
+	var workflowRuns = [];
+	var nextPageExists = true;
+	var currentPage = 1;
+	var pageSize = 100;
+	while (nextPageExists) {
+		let result = await axios.get(
+			`${githubUrl}/repos/softwareartistry/${data.reponame}/actions/workflows/deploy.yml/runs`,
+			{
+				headers: {
+					Authorization: "Bearer " + process.env.GITHUB_ACCESS_TOKEN,
+				},
+				params: {
+					branch: branch,
+					per_page: pageSize,
+					page: currentPage,
+				},
+			}
+		);
+		nextPageExists = result["data"]["total_count"] > currentPage * pageSize;
+		currentPage = currentPage + 1;
+		workflowRuns = workflowRuns.concat(result["data"]["workflow_runs"]);
+	}
+	workflowRuns.sort(
+		(a, b) => new Date(b.created_at) - new Date(a.created_at)
+	);
+	return {
+		status: workflowRuns[0].status,
+		conclusion: workflowRuns[0].conclusion,
+		created_at: workflowRuns[0].created_at,
+	};
+};
+
+
+
 export default {
 	callAPIMethodPost,
 	callgitAPIMethodPost,
