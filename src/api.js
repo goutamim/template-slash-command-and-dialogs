@@ -103,6 +103,7 @@ const getLastRunStatusOfaWorkflow = async (data) => {
 	var nextPageExists = true;
 	var currentPage = 1;
 	var pageSize = 100;
+	var branch = "sprint";
 	while (nextPageExists) {
 		let result = await axios.get(
 			`${githubUrl}/repos/softwareartistry/${data.reponame}/actions/workflows/deploy.yml/runs`,
