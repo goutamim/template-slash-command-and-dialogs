@@ -43,7 +43,8 @@ app.post("/deploy", async (req, res) => {
 		if((await api.getLastRunStatusOfaWorkflow(repoName)).status= "completed")
 		{
 		//post in production channel
-		console.log("repo exists");
+		console.log("repo exists and last deployment is completed");
+	    process.exit(0);
 		let data = {
 			requester: user_id,
 			reponame: text,
