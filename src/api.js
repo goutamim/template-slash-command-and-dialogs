@@ -98,7 +98,7 @@ const norepoTenant = async (data) => {
 	});
 };
 
-const getLastRunStatusOfaWorkflow = async (data) => {
+const getLastRunStatusOfaWorkflow = async (repoName) => {
 	var workflowRuns = [];
 	var nextPageExists = true;
 	var currentPage = 1;
@@ -119,7 +119,7 @@ const getLastRunStatusOfaWorkflow = async (data) => {
 	);
 	while (nextPageExists) {
 		let result = await axios.get(
-			`${githubUrl}/repos/softwareartistry/${data.reponame}/actions/workflows/deploy.yml/runs`,
+			`${githubUrl}/repos/softwareartistry/${repoName}/actions/workflows/deploy.yml/runs`,
 			{
 				headers: {
 					Authorization: "Bearer " + process.env.GITHUB_ACCESS_TOKEN,
