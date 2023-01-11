@@ -4,7 +4,9 @@ const repoTenantList = [
 	{ repo: "practifly-server", tenant: ["demo1","demo2","mhill","phs","nephc"] }, //DNS practifly.com //practifly practifly-cli same image.
 	{ repo: "practifly-ui", tenant: ["demo1","demo2","mhill","phs","nephc"] },
 	{ repo: "heim-ui", tenant:["314e"]}, 
-	{ repo: "heim-server",tenant:["314e"]} //heim.314ecorp.com //only server
+	{ repo: "heim-server",tenant:["314e"]}, //heim.314ecorp.com //only server
+	{ repo: "dms-ui", tenant:["demo1"]}, 
+	{ repo: "dms-app", tenant:["demo1"]} //cli server 
 ];
 
 const apiUrl = "https://slack.com/api";

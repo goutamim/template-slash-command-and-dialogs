@@ -36,9 +36,19 @@ app.post("/deploy", async (req, res) => {
 	//const buildStaus = getBuildStatus
 
 	if (
-		getRepoList().includes(repoName) &&
-		getTenantList(repoName)?.includes(tenantName)
-	) {
+		!(getRepoList().includes(repoName) &&
+		getTenantList(repoName)?.includes(tenantName))
+	)
+	{
+		// repo or tenant  dont exist
+		console.log("repo or tenant dont exist");
+		//return res.status(404).send("tenant  or repo not found");
+		let data = { requester: user_id, reponame: text, channel: channel_id };
+		await api.norepoTenant(data);
+		console.log("calling norepoTenant api");
+		return res.send("");
+	}
+
 		//check last status of deployment
 		if((await api.getLastRunStatusOfaWorkflow(repoName)).status == "completed")
 		{
@@ -57,15 +67,6 @@ app.post("/deploy", async (req, res) => {
 		let data = { requester: user_id, reponame: text, channel: channel_id };
 		await api.norepoTenant(data);
 	}
-	} else {
-		// repo or tenant  dont exist
-		console.log("repo or tenant dont exist");
-		//return res.status(404).send("tenant  or repo not found");
-		let data = { requester: user_id, reponame: text, channel: channel_id };
-		await api.norepoTenant(data);
-		console.log("calling norepoTenant api");
-	}
-
 	return res.send("");
 });
 
