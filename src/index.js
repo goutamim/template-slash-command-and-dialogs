@@ -50,8 +50,13 @@ app.post("/deploy", async (req, res) => {
 	}
 
 		//check last status of deployment
-		if((await api.getLastRunStatusOfaWorkflow(repoName)).status == "completed")
+		if(!(await api.getLastRunStatusOfaWorkflow(repoName)).status == "completed")
 		{
+			console.log("last sprint build was not successfull,please fix sprint first")
+			let data = { requester: user_id, reponame: text, channel: channel_id };
+			await api.norepoTenant(data);
+			return res.send("");
+		}
 		//post in production channel
 		console.log("repo exists and last deployment is completed");
 		let data = {
@@ -62,12 +67,7 @@ app.post("/deploy", async (req, res) => {
 		// process.exit(0);
 		await api.callAPIMethodPost("chat.postMessage", approvalRequest(data));
 		console.log("sent  approval  message api  to channel");
-	} else{
-		console.log("last sprint build was not successfull,please fix sprint first")
-		let data = { requester: user_id, reponame: text, channel: channel_id };
-		await api.norepoTenant(data);
-	}
-	return res.send("");
+	    return res.send("");
 });
 
 /*
