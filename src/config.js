@@ -6,7 +6,10 @@ const repoTenantList = [
 	{ repo: "heim-ui", tenant:["314e"]}, 
 	{ repo: "heim-server",tenant:["314e"]}, //heim.314ecorp.com //only server
 	{ repo: "dms-ui", tenant:["demo1"]}, 
-	{ repo: "dms-app", tenant:["demo1"]} //cli server 
+	{ repo: "dms-app", tenant:["demo1"]}, //cli and server \
+	{ repo: "jeeves-ui", tenant:["314e","demo1","jmh","ryan","sales","uci"]}, 
+	{ repo: "jeeves-app", tenant:["314e","demo1","jmh","ryan","sales","uci"]} //cli and server 
+
 ];
 
 const apiUrl = "https://slack.com/api";
